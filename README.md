@@ -9,8 +9,8 @@ Every row links to the public commit, pull request, or issue.
 |------|-----------|-----|-------|--------|
 | 2026-08-27 | `drivers/net/slip` | Drop the `slip_devs[]` entry from `ndo_uninit`, so `sl_sync()` can no longer dereference a device that `netdev_run_todo()` already freed after releasing RTNL | Use-after-free (CWE-416) | [`2c4e7c42d77e`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2c4e7c42d77e78ad595dbb9e4b5886b58b45d89d) |
 
-Reported by Syzkaller at the Linux Verification Center (linuxtesting.org); root-caused, reproduced
-and fixed by me. Applied by Paolo Abeni to `netdev/net`, now in mainline, `Cc: stable@vger.kernel.org`.
+Root-caused, reproduced and fixed by me from a Syzkaller report. Applied by Paolo Abeni to
+`netdev/net`, now in mainline, `Cc: stable@vger.kernel.org`.
 
 ## Userspace parsers
 
