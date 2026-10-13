@@ -1,6 +1,6 @@
 # Security fixes
 
-Memory-safety and denial-of-service bugs I reported and fixed upstream.
+Memory-safety, denial-of-service, and undefined-behaviour bugs I reported and fixed upstream.
 Every row links to the public commit, pull request, or issue.
 
 ## Linux kernel
@@ -11,6 +11,17 @@ Every row links to the public commit, pull request, or issue.
 
 Root-caused, reproduced and fixed by me from a Syzkaller report. Applied by Paolo Abeni to
 `netdev/net`, now in mainline, `Cc: stable@vger.kernel.org`.
+
+## DPDK
+
+| Date | Subsystem | Fix | Class | Commit |
+|------|-----------|-----|-------|--------|
+| 2026-09-18 | `lib/net` | Cast the IPv6 next-header field to `uint32_t` before shifting by 24 in `rte_ipv6_phdr_cksum()`, avoiding signed-shift overflow for protocol values ≥ 128 | Undefined behaviour (signed left shift overflow) | [`bfbec118e9df`](https://git.dpdk.org/dpdk/commit/?id=bfbec118e9df73b35b375b668424c33ff36e62f2) |
+
+Found with AFL++ and UBSan while fuzzing `fuzz_cksum`; reproduced and fixed by me.
+[Patch accepted](https://patches.dpdk.org/project/dpdk/patch/20260918074729.79205-1-haa@amicon.ru/)
+and applied by Thomas Monjalon, `Cc: stable@dpdk.org`. Intel functional testing reported PASS.
+The date above is the patch submission date.
 
 ## Userspace parsers
 
