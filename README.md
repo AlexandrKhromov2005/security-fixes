@@ -7,11 +7,17 @@ Every row links to the public commit, pull request, or issue.
 
 | Date | Subsystem | Fix | Class | Commit |
 |------|-----------|-----|-------|--------|
+| 2026-08-24 | `fs/smb/server` | Zero `FS_OBJECT_ID_INFORMATION` before filling it, preventing disclosure of up to 31 bytes from a previous, unsent response in a compound SMB2 request | Information disclosure (CWE-200) | [`399aa12450a6`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=399aa12450a61a5c73dc77e73f069ece9687c95d) |
 | 2026-08-24 | `fs/smb/server` | Initialize `FileSystemControlFlags` in `FS_CONTROL_INFORMATION`, preventing an uninitialized-field information leak in compound SMB2 responses | Information disclosure (CWE-200) | [`c0cd3fc68241`](https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=c0cd3fc6824122014da2b3b0cb7ddeaa2946ec8e) |
+| 2026-08-24 | `fs/smb/server` | Fill `FileSysIdentifier` in `FS_POSIX_INFORMATION` from `statfs()` with little-endian conversion, preventing an eight-byte information leak in compound SMB2 responses | Information disclosure (CWE-200) | [`db2267b27c05`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=db2267b27c054a6c2151ff7fbb67927e784f31d6) |
 | 2026-08-27 | `drivers/net/slip` | Drop the `slip_devs[]` entry from `ndo_uninit`, so `sl_sync()` can no longer dereference a device that `netdev_run_todo()` already freed after releasing RTNL | Use-after-free (CWE-416) | [`2c4e7c42d77e`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2c4e7c42d77e78ad595dbb9e4b5886b58b45d89d) |
 
 Root-caused, reproduced and fixed by me from a Syzkaller report. Applied by Paolo Abeni to
 `netdev/net`, now in mainline, `Cc: stable@vger.kernel.org`.
+
+The three ksmbd fixes were applied by Namjae Jeon and included in the
+[ksmbd fixes for 7.3-rc2](https://lists.openwall.net/linux-kernel/2026/09/01/1409),
+now in mainline, `Cc: stable@vger.kernel.org`. Their dates above are patch submission dates.
 
 ## DPDK
 
